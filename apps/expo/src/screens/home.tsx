@@ -1,5 +1,6 @@
 import React from "react";
 import { UserIcon } from "react-native-heroicons/solid";
+import { PlusIcon } from "react-native-heroicons/solid";
 import {
   Button,
   Text,
@@ -105,7 +106,7 @@ export const HomeScreen = () => {
           </View>
         </View>
 
-        <View className="py-2">
+        {/* <View className="py-2">
           {showPost ? (
             <Text className="">
               <Text className="font-semibold">Selected post:</Text>
@@ -128,9 +129,14 @@ export const HomeScreen = () => {
             </TouchableOpacity>
           )}
         />
+        <CreatePost /> */}
 
-        <CreatePost />
         <SignOut />
+
+        {/* tailwind issue */}
+        <TouchableOpacity className="absolute right-14 bottom-9 flex h-16 w-16 items-center justify-center rounded-full bg-[#FBBD23] p-3 shadow-lg">
+          <PlusIcon className="" color={"white"} width={50} height={50} />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
