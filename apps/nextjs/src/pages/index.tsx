@@ -7,7 +7,9 @@ import { useAuth, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 
 const PostCard: React.FC<{
-  post: inferProcedureOutput<AppRouter["post"]["all"]>[number];
+  post:
+    | inferProcedureOutput<AppRouter["post"]["all"]>[number]
+    | { title: string; content: string };
 }> = ({ post }) => {
   return (
     <div className="max-w-2xl rounded-lg border-2 border-gray-500 p-4 transition-all hover:scale-[101%]">
@@ -21,6 +23,7 @@ const PostCard: React.FC<{
 
 const Home: NextPage = () => {
   const postQuery = trpc.post.all.useQuery();
+  const exercisesQuery = trpc.exercises.all.useQuery();
 
   return (
     <>
@@ -32,7 +35,7 @@ const Home: NextPage = () => {
       <main className="flex h-screen flex-col items-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-8">
           <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-            Create <span className="text-[hsl(280,100%,70%)]">T3</span> Turbo
+            `` Create <span className="text-[hsl(280,100%,70%)]">T3</span> Turbo
           </h1>
           <AuthShowcase />
 
@@ -41,6 +44,15 @@ const Home: NextPage = () => {
               <div className="flex flex-col gap-4">
                 {postQuery.data?.map((p) => {
                   return <PostCard key={p.id} post={p} />;
+                })}
+                {JSON.stringify(exercisesQuery.data)}
+                {exercisesQuery.data?.map((e) => {
+                  return (
+                    <PostCard
+                      key={e.id}
+                      post={{ title: e.name, content: e.description || "" }}
+                    />
+                  );
                 })}
               </div>
             ) : (

@@ -1,17 +1,145 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+//   relationMode = "prisma"
 }
 
 model Post {
-    id      String @id @default(cuid())
-    title   String
-    content String
+  id      String @id @default(cuid())
+  title   String
+  content String
+}
+
+model exercise {
+  id                      String                    @id @default(cuid())
+  name                    String
+  primaryMuscleGroupId    String
+  description             String?                   @db.Text
+  commonPitfalls          String?                   @db.Text
+  gifUrl                  String?
+  measurementType         String
+  primaryMuscleGroup      muscleGroup               @relation("PrimaryMuscleGroup", fields: [primaryMuscleGroupId], references: [id])
+  workoutExercise         workoutExercise[]
+  workoutTemplateExercise workoutTemplateExercise[]
+
+  @@index([primaryMuscleGroupId])
+}
+
+model muscleGroup {
+  id               String     @id @default(cuid())
+  name             String
+  primaryExercises exercise[] @relation("PrimaryMuscleGroup")
+}
+
+model workout {
+  id         String            @id @default(cuid())
+  name       String
+  startTime  DateTime
+  endTime    DateTime?
+  timer      Int?
+  notes      String?           @db.Text
+  templateId String?
+  userId     String
+  template   workoutTemplate?  @relation(fields: [templateId], references: [id])
+  exercises  workoutExercise[]
+
+  @@index([userId])
+  @@index([templateId])
+}
+
+model workoutExercise {
+  id         String               @id @default(cuid())
+  order      Int
+  exerciseId String
+  timer      Int?
+  notes      String?              @db.Text
+  workoutId  String?
+  exercise   exercise             @relation(fields: [exerciseId], references: [id])
+  Workout    workout?             @relation(fields: [workoutId], references: [id])
+  sets       workoutExerciseSet[]
+
+  @@index([exerciseId])
+  @@index([workoutId])
+}
+
+model workoutExerciseSet {
+  id                String           @id @default(cuid())
+  weight            Float
+  numReps           Int
+  complete          Boolean
+  order             Int
+  workoutExerciseId String?
+  workoutExercise   workoutExercise? @relation(fields: [workoutExerciseId], references: [id])
+
+  @@index([workoutExerciseId])
+}
+
+model workoutTemplate {
+  id                  String                    @id @default(cuid())
+  userId              String
+  name                String
+  description         String?                   @db.Text
+  workoutPlanId       String?
+  workout             workout[]
+  workoutPlan         workoutPlan?              @relation(fields: [workoutPlanId], references: [id])
+  exercises           workoutTemplateExercise[]
+  workoutPlanTemplate workoutPlanTemplate[]
+
+  @@index([userId])
+  @@index([workoutPlanId])
+}
+
+model workoutTemplateExercise {
+  id                String                       @id @default(cuid())
+  order             Int
+  workoutTemplateId String
+  exerciseId        String
+  workoutTemplate   workoutTemplate              @relation(fields: [workoutTemplateId], references: [id])
+  exercise          exercise                     @relation(fields: [exerciseId], references: [id])
+  sets              workoutTemplateExerciseSet[]
+
+  @@index([workoutTemplateId])
+  @@index([exerciseId])
+}
+
+model workoutTemplateExerciseSet {
+  id                        String                  @id @default(cuid())
+  workoutTemplateExerciseId String
+  weight                    Float?
+  numReps                   Int?
+  time                      Int?
+  distance                  Float?
+  workoutTemplateExercise   workoutTemplateExercise @relation(fields: [workoutTemplateExerciseId], references: [id])
+
+  @@index([workoutTemplateExerciseId])
+}
+
+model workoutPlan {
+  id        String            @id @default(cuid())
+  userId    String?
+  templates workoutTemplate[]
+
+  @@index([userId])
+}
+
+model workoutPlanTemplate {
+  id         String          @id @default(cuid())
+  order      Int
+  templateId String
+  template   workoutTemplate @relation(fields: [templateId], references: [id])
+
+  @@index([templateId])
+}
+
+model SecondaryMuscleGroup {
+  A String
+  B String
+
+  @@unique([A, B], map: "_SecondaryMuscleGroup_AB_unique")
+  @@index([B], map: "_SecondaryMuscleGroup_B_index")
+  @@map("_SecondaryMuscleGroup")
 }
