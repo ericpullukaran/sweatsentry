@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { TRPCProvider } from "./utils/trpc";
-
+import { View, SafeAreaView } from "react-native";
 import { HomeScreen } from "./screens/home";
 import { SignInSignUpScreen } from "./screens/signin";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
@@ -19,7 +19,7 @@ export const App = () => {
         <TRPCProvider>
           <SafeAreaProvider>
             <HomeScreen />
-            <StatusBar />
+            <StatusBar style="light" />
           </SafeAreaProvider>
         </TRPCProvider>
       </SignedIn>
