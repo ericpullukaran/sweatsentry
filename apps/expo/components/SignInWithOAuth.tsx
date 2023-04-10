@@ -51,7 +51,7 @@ const SignInWithOAuth = () => {
           <UserIcon color={"black"} width={20} />
         </View>
         {/* XX IDK WHY I CANT DO BG-BLACK only bg-[#000000] works... we also need the primary/secondary stuff to work */}
-        <View className="bg-black h-[1px] flex-1" />
+        <View className="h-[1px] flex-1 bg-[#000000]" />
       </View>
 
       <View className="flex-row justify-center gap-4">
