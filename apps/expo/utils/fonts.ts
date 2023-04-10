@@ -4,6 +4,7 @@ import {
   Inter_500Medium,
   Inter_600SemiBold,
   Inter_700Bold,
+  Inter_800ExtraBold,
 } from "@expo-google-fonts/inter";
 
 const fontsToLoad = {
@@ -11,6 +12,7 @@ const fontsToLoad = {
   Inter_500Medium,
   Inter_600SemiBold,
   Inter_700Bold,
+  Inter_800ExtraBold,
 };
 
 export const useFonts = () => useExpoFonts(fontsToLoad);
@@ -23,5 +25,6 @@ export const fonts = {
     medium: "Inter_500Medium",
     semiBold: "Inter_600SemiBold",
     bold: "Inter_700Bold",
+    extrabold: "Inter_800ExtraBold",
   },
 } satisfies PublicFonts;

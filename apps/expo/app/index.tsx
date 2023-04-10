@@ -10,7 +10,7 @@ import { fonts } from "~/utils/fonts";
 const SignOut = () => {
   const { signOut } = useAuth();
   return (
-    <View className="border-gray-500 rounded-lg border-2 p-4">
+    <View className="rounded-lg border-2 border-gray-500 p-4">
       <Button
         title="Sign Out"
         onPress={() => {
@@ -41,7 +41,7 @@ const HomeScreen = () => {
             <Text
               className="text-5xl text-[#FBBD23]"
               style={{
-                fontFamily: fonts.inter.semiBold,
+                fontFamily: fonts.inter.extrabold,
               }}
             >
               {userQuery.data?.firstName || "loading..."}
