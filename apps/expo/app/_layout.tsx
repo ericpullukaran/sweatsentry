@@ -1,5 +1,5 @@
 import { TRPCProvider } from "~/utils/trpc";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { SignInSignUpScreen } from "./signin";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
@@ -39,7 +39,7 @@ const Layout: React.FC = () => {
       <SignedIn>
         <TRPCProvider>
           <SafeAreaProvider>
-            {/* ! Don't put any elements around the <Stack /> here. You might looks several hours of your life */}
+            {/* ! Don't put any elements around the <Stack /> here. You might loose several hours of your life */}
             <Stack
               screenOptions={{
                 animation: "fade",
@@ -50,7 +50,9 @@ const Layout: React.FC = () => {
         </TRPCProvider>
       </SignedIn>
       <SignedOut>
-        <SignInSignUpScreen />
+        <SafeAreaView>
+          <SignInSignUpScreen />
+        </SafeAreaView>
       </SignedOut>
     </ClerkProvider>
   );

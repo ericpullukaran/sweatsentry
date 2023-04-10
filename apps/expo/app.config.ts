@@ -4,8 +4,8 @@ const CLERK_PUBLISHABLE_KEY =
   "pk_test_ZW1pbmVudC1saW9uZmlzaC04NS5jbGVyay5hY2NvdW50cy5kZXYk";
 
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
-  name: "expo",
-  slug: "expo",
+  name: "Sweat Sentry",
+  slug: "sweat-sentry",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/icon.png",
@@ -21,17 +21,18 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   assetBundlePatterns: ["**/*"],
   ios: {
     supportsTablet: true,
-    bundleIdentifier: "your.bundle.identifier",
+    bundleIdentifier: "com.activeaces.app",
   },
   android: {
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
       backgroundColor: "#2e026d",
     },
+    package: "com.activeaces.app",
   },
   extra: {
     eas: {
-      projectId: "your-project-id",
+      projectId: "041be0b4-a860-4a1e-a1b5-eec238da6d47",
     },
     CLERK_PUBLISHABLE_KEY,
   },
