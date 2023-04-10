@@ -40,11 +40,30 @@ const Layout: React.FC = () => {
         <TRPCProvider>
           <SafeAreaProvider>
             {/* ! Don't put any elements around the <Stack /> here. You might looks several hours of your life */}
-            <Stack
-              screenOptions={{
-                animation: "fade",
-              }}
-            />
+            <Stack>
+              <Stack.Screen
+                name="index"
+                options={{
+                  headerShown: false,
+                  animation: "fade",
+                }}
+              />
+              <Stack.Screen
+                name="create_workout"
+                options={{
+                  // Set the presentation mode to modal for our modal route.
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="exercises"
+                options={{
+                  // Set the presentation mode to modal for our modal route.
+                  presentation: "modal",
+                  headerShown: false,
+                }}
+              />
+            </Stack>
             <StatusBar style="light" />
           </SafeAreaProvider>
         </TRPCProvider>
