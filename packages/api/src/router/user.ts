@@ -4,7 +4,14 @@ import { router, protectedProcedure } from "../trpc";
 
 export const userRouter = router({
   current: protectedProcedure.query(({ ctx }) => {
-    return ctx.user;
+    const publicUserAuthDetails = {
+      id: ctx.user.id,
+      email: ctx.user.emailAddresses[0]?.emailAddress,
+      firstName: ctx.user.firstName,
+      lastName: ctx.user.lastName,
+      avatar: ctx.user.profileImageUrl,
+    };
+    return publicUserAuthDetails;
   }),
 });
 

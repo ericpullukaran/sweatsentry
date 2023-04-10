@@ -2,7 +2,7 @@ import { useOAuth } from "@clerk/clerk-expo";
 import { UserIcon } from "react-native-heroicons/outline";
 import React from "react";
 import { Text, Image, TouchableOpacity, View } from "react-native";
-import { useWarmUpBrowser } from "../hooks/useWarmUpBrowser";
+import { useWarmUpBrowser } from "../utils/useWarmUpBrowser";
 
 const SignInWithOAuth = () => {
   useWarmUpBrowser();
@@ -22,14 +22,13 @@ const SignInWithOAuth = () => {
           authHandler = appleOAuth.startOAuthFlow;
         }
 
-        const { createdSessionId, signIn, signUp, setActive } =
-          await authHandler();
+        const { createdSessionId, setActive } = await authHandler();
         if (createdSessionId) {
           setActive({ session: createdSessionId });
         } else {
           // Modify this code to use signIn or signUp to set this missing requirements you set in your dashboard.
           throw new Error(
-            "There are unmet requirements, modifiy this else to handle them",
+            "There are unmet requirements, modify this else to handle them",
           );
         }
       } catch (err) {
@@ -61,7 +60,7 @@ const SignInWithOAuth = () => {
           className="flex h-16 w-16 items-center justify-center rounded-lg border-2 border-[#ededed]"
         >
           <Image
-            source={require("../../assets/f_logo_RGB-Blue_58.png")}
+            source={require("~/assets/f_logo_RGB-Blue_58.png")}
             style={{
               resizeMode: "contain",
             }}
@@ -73,7 +72,7 @@ const SignInWithOAuth = () => {
           className="flex h-16 w-16 items-center justify-center rounded-lg border-2 border-[#ededed]"
         >
           <Image
-            source={require("../../assets/google.png")}
+            source={require("~/assets/google.png")}
             style={{
               resizeMode: "contain",
             }}
@@ -85,7 +84,7 @@ const SignInWithOAuth = () => {
           className="flex h-16 w-16 items-center justify-center rounded-lg border-2 border-[#ededed]"
         >
           <Image
-            source={require("../../assets/apple.png")}
+            source={require("~/assets/apple.png")}
             style={{
               resizeMode: "contain",
             }}

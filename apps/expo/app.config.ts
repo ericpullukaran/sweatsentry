@@ -36,6 +36,10 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     CLERK_PUBLISHABLE_KEY,
   },
   plugins: ["./expo-plugins/with-modify-gradle.js"],
+  scheme: "myapp",
+  web: {
+    bundler: "metro",
+  },
 });
 
 export default defineConfig;

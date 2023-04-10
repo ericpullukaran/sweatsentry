@@ -11,7 +11,7 @@ import Constants from "expo-constants";
  */
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink } from "@trpc/client";
+import { TRPCClientError, httpBatchLink } from "@trpc/client";
 import { transformer } from "@acme/api/transformer";
 import { useAuth } from "@clerk/clerk-expo";
 
@@ -36,7 +36,21 @@ export const TRPCProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const { getToken } = useAuth();
-  const [queryClient] = React.useState(() => new QueryClient());
+  const [queryClient] = React.useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            onError(err) {
+              console.log(err);
+              if (err instanceof TRPCClientError) {
+                console.log(err.data, err.cause, err.meta, err.name, err.shape);
+              }
+            },
+          },
+        },
+      }),
+  );
   const [trpcClient] = React.useState(() =>
     trpc.createClient({
       transformer,
