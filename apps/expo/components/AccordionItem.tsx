@@ -39,10 +39,10 @@ function AccordionItem({ header, body, footer }: AccordionItemProps) {
   });
 
   return (
-    <View className="overflow-hidden rounded-xl bg-red-500">
+    <View className="overflow-hidden rounded-xl bg-slate-200">
       <Pressable
         onPress={() => toggleListItem()}
-        className="z-40 flex-row items-center rounded-lg bg-slate-200 p-3"
+        className="z-40 flex-row items-center rounded-lg bg-slate-300 p-3"
       >
         {header}
         <Animated.View
@@ -58,7 +58,7 @@ function AccordionItem({ header, body, footer }: AccordionItemProps) {
 
       {isActive && (
         <View className="-top-4">
-          <View className="bg-success px-4 pb-6 pt-8">{body}</View>
+          <View className="px-4 pb-6 pt-8">{body}</View>
           {footer}
         </View>
       )}
