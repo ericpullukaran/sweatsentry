@@ -1,37 +1,9 @@
-import React, { useRef, useState } from "react";
-import {
-  Animated,
-  LayoutAnimation,
-  Pressable,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import { toggleAnimationExercise } from "~/utils/toggleAnimationExercise";
-import { ChevronDownIcon } from "react-native-heroicons/solid";
-import { myResolveTWConfig } from "~/utils/myResolveTWConfig";
+import React, { useState } from "react";
+import { Pressable, Text, TextInput, View } from "react-native";
 import AccordionItem from "./AccordionItem";
-import { CheckBadgeIcon } from "react-native-heroicons/outline";
 
 function ExerciseCard() {
   const [isActive, setIsActive] = useState(false);
-  const [isActive2, setIsActive2] = useState(false);
-  const animationController = useRef(new Animated.Value(0)).current;
-  const toggleListItem = () => {
-    const config = {
-      duration: 300,
-      toValue: isActive ? 0 : 1,
-      useNativeDriver: true,
-    };
-    Animated.timing(animationController, config).start();
-    LayoutAnimation.configureNext(toggleAnimationExercise);
-    setIsActive(!isActive);
-  };
-
-  const arrowTransform = animationController.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["-90deg", "0deg"],
-  });
 
   return (
     <View>

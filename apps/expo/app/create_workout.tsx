@@ -19,7 +19,7 @@ import { useRouter } from "expo-router";
 import ExerciseCard from "~/components/ExerciseCard";
 
 function CreateWorkout() {
-  const navigation = useRouter();
+  const router = useRouter();
 
   return (
     <SafeAreaView className="flex h-full justify-center">
@@ -59,7 +59,7 @@ function CreateWorkout() {
         <ScrollView onScrollBeginDrag={() => Keyboard.dismiss()}>
           <ExerciseCard />
           <TouchableOpacity
-            onPress={() => navigation.push("exercises")}
+            onPress={() => router.push("exercises")}
             className="mt-8 flex h-24 flex-row items-center justify-center rounded-xl border-2 border-dashed border-neutral/50"
           >
             <Text className="mr-2 text-lg font-bold">Add Exercise</Text>
