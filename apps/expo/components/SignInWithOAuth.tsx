@@ -3,6 +3,7 @@ import { UserIcon } from "react-native-heroicons/outline";
 import React from "react";
 import { Text, Image, TouchableOpacity, View } from "react-native";
 import { useWarmUpBrowser } from "../utils/useWarmUpBrowser";
+import DividerWithIcon from "./DividerWithIcon";
 
 const SignInWithOAuth = () => {
   useWarmUpBrowser();
@@ -45,13 +46,10 @@ const SignInWithOAuth = () => {
         <Text className="font-extrabold text-orange-400">Ace</Text> your fitness
         goals
       </Text>
-      <View className="mx-auto mb-8 mt-4 w-[75%] flex-row items-center">
-        <View className="h-[1px] flex-1 bg-black" />
-        <View className="mx-3">
-          <UserIcon color={"black"} width={20} />
-        </View>
-        <View className="h-[1px] flex-1 bg-black" />
-      </View>
+
+      <DividerWithIcon>
+        <UserIcon color={"black"} width={20} />
+      </DividerWithIcon>
 
       <View className="flex-row justify-center gap-4">
         <TouchableOpacity

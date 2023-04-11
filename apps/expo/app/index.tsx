@@ -1,11 +1,12 @@
-import React from "react";
-import { UserIcon } from "react-native-heroicons/solid";
-import { Button, Text, TouchableOpacity, View } from "react-native";
+import React, { useLayoutEffect } from "react";
+import { PlusCircleIcon, UserIcon } from "react-native-heroicons/solid";
+import { Button, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { useAuth } from "@clerk/clerk-expo";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { trpc } from "../utils/trpc";
 import { fonts } from "~/utils/fonts";
+import { Link, useRouter } from "expo-router";
 
 const SignOut = () => {
   const { signOut } = useAuth();
@@ -22,6 +23,7 @@ const SignOut = () => {
 };
 
 const HomeScreen = () => {
+  const router = useRouter();
   const userQuery = trpc.user.current.useQuery(); // XX FFFS THIS IS NOT WORKING
 
   return (
@@ -55,6 +57,22 @@ const HomeScreen = () => {
         </View>
 
         <SignOut />
+        <View className="absolute bottom-9 left-0 right-0">
+          <Link
+            href={"create_workout"}
+            className="mx-auto rounded-full"
+            asChild
+          >
+            <Pressable>
+              <View className="mx-auto flex flex-row items-center justify-center rounded-full bg-[#FBBD23] p-1  shadow-lg">
+                <PlusCircleIcon width={50} height={50} color={"white"} />
+                <Text className="ml-1 mr-4 text-lg font-extrabold">
+                  Start Workout
+                </Text>
+              </View>
+            </Pressable>
+          </Link>
+        </View>
       </View>
     </SafeAreaView>
   );
