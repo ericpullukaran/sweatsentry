@@ -1,8 +1,15 @@
 import React, { useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { FlatList, Pressable, Text, TextInput, View } from "react-native";
 import AccordionItem from "./AccordionItem";
-
+import SetMeasurement from "./SetMeasurement";
+const EMPTY_SET = { weights: 0, num_reps: 0 };
 function ExerciseCard() {
+  const [sets, setSets] = useState([EMPTY_SET]);
+  const removeSet = (indexToRemove: number) => {
+    console.log(sets, indexToRemove);
+
+    setSets(sets.filter((_, index) => index !== indexToRemove));
+  };
   return (
     <View>
       <AccordionItem
@@ -19,28 +26,22 @@ function ExerciseCard() {
           </>
         }
         body={
-          <View className="justify-center rounded-lg ">
-            <Text className="text-md font-medium">Set 1</Text>
-            <View className="mt-1 flex-row gap-4">
-              <View>
-                <Text className="text-lg font-extrabold">Weight</Text>
-                <TextInput
-                  keyboardType="numeric"
-                  className="h-8 rounded-lg border-2 border-black/70"
-                ></TextInput>
-              </View>
-              <View>
-                <Text className="text-lg font-extrabold">Reps</Text>
-                <TextInput
-                  keyboardType="numeric"
-                  className="h-8 rounded-lg border-2 border-black/70"
-                ></TextInput>
-              </View>
-            </View>
-          </View>
+          <>
+            <FlatList
+              scrollEnabled={false}
+              data={sets}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item, index }) => (
+                <SetMeasurement key={index} num={index} removeSet={removeSet} />
+              )}
+            />
+          </>
         }
         footer={
-          <Pressable className="mt-3 items-center">
+          <Pressable
+            onPress={() => setSets([...sets, EMPTY_SET])}
+            className="mt-3 items-center"
+          >
             <Text className="text-lg font-extrabold">Add Set</Text>
           </Pressable>
         }
