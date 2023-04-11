@@ -3,13 +3,9 @@ import { Pressable, Text, TextInput, View } from "react-native";
 import AccordionItem from "./AccordionItem";
 
 function ExerciseCard() {
-  const [isActive, setIsActive] = useState(false);
-
   return (
     <View>
       <AccordionItem
-        isActive={isActive}
-        setIsActive={setIsActive}
         header={
           <>
             <View className="mr-2 h-16 w-20 rounded-md bg-red-300"></View>
@@ -17,11 +13,9 @@ function ExerciseCard() {
               <Text className="text-base font-extrabold">Chest</Text>
               <Text className="text-xs"># Bench press</Text>
             </View>
-            {!isActive && (
-              <View className="mr-2">
-                <Text>0/2</Text>
-              </View>
-            )}
+            <View className="mr-2">
+              <Text>0/2</Text>
+            </View>
           </>
         }
         body={

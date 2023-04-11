@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef, useState } from "react";
+import React, { ReactNode, useMemo, useRef, useState } from "react";
 import {
   Animated,
   Easing,
@@ -16,19 +16,11 @@ interface AccordionItemProps {
   header: ReactNode;
   body: ReactNode;
   footer: ReactNode;
-
-  isActive: boolean;
-  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function AccordionItem({
-  header,
-  body,
-  footer,
-  isActive,
-  setIsActive,
-}: AccordionItemProps) {
-  const animationController = useRef(new Animated.Value(0)).current;
+function AccordionItem({ header, body, footer }: AccordionItemProps) {
+  const [isActive, setIsActive] = useState(false);
+  const animationController = useMemo(() => new Animated.Value(0), []);
   const toggleListItem = () => {
     const config = {
       duration: 200,

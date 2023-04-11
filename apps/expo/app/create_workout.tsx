@@ -15,7 +15,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import DividerWithIcon from "~/components/DividerWithIcon";
 import { myResolveTWConfig } from "~/utils/myResolveTWConfig";
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import ExerciseCard from "~/components/ExerciseCard";
 
 function CreateWorkout() {
