@@ -13,6 +13,23 @@ const getCurrentWorkout = async (ctx: Context) => {
   });
 };
 
+const setDetailsUnion = z.union([
+  z.object({
+    weight: z.number().positive().finite(),
+    numReps: z.number().positive().int(),
+  }),
+  z.object({
+    numReps: z.number().positive().int(),
+  }),
+  z.object({
+    time: z.number().positive().int(),
+  }),
+  z.object({
+    time: z.number().positive().int(),
+    distance: z.number().positive(),
+  }),
+]);
+
 export const workoutsRouter = router({
   history: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.workout.findMany({
@@ -74,24 +91,7 @@ export const workoutsRouter = router({
           z.object({
             exerciseId: z.string(),
             notes: z.string().optional(),
-            sets: z.array(
-              z.union([
-                z.object({
-                  weight: z.number().positive().finite(),
-                  numReps: z.number().positive().int(),
-                }),
-                z.object({
-                  numReps: z.number().positive().int(),
-                }),
-                z.object({
-                  time: z.number().positive().int(),
-                }),
-                z.object({
-                  time: z.number().positive().int(),
-                  distance: z.number().positive(),
-                }),
-              ]),
-            ),
+            sets: z.array(setDetailsUnion),
           }),
         ),
       }),
@@ -182,38 +182,74 @@ export const workoutsRouter = router({
       });
     }),
 
-  // update: protectedProcedure
-  //   .input(
-  //     z.object({
-  //       id: z.string(),
-  //       updates: z
-  //         .object({
-  //           name: z.string(),
-  //         })
-  //         .partial(),
-  //     }),
-  //   )
-  //   .mutation(async ({ ctx, input }) => {
-  //     // Need to validate separately since prisma's update doesn't allow us to filter by userId
-  //     const existing = await ctx.prisma.workout.findFirst({
-  //       where: {
-  //         id: input.id,
-  //         userId: ctx.user.id,
-  //       },
-  //     });
+  delete: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.prisma.workout.findFirst({
+        where: {
+          id: input.id,
+          userId: ctx.user.id,
+        },
+      });
 
-  //     if (!existing) {
-  //       throw new TRPCError({
-  //         code: "NOT_FOUND",
-  //         message: "Workout not found",
-  //       });
-  //     }
+      if (!existing) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Workout not found",
+        });
+      }
 
-  //     await ctx.prisma.workout.update({
-  //       where: {
-  //         id: input.id,
-  //       },
-  //       data: input.updates,
-  //     });
-  //   }),
+      await ctx.prisma.workout.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
+
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        exerciseUpdates: z.array(
+          z.object({
+            id: z.string(),
+            notes: z.string().optional(),
+          }),
+        ),
+        setUpdates: z.array(
+          z
+            .object({
+              id: z.string(),
+            })
+            .and(setDetailsUnion),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Need to validate separately since prisma's update doesn't allow us to filter by userId
+      const existing = await ctx.prisma.workout.findFirst({
+        where: {
+          id: input.id,
+          userId: ctx.user.id,
+        },
+      });
+
+      if (!existing) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Workout not found",
+        });
+      }
+
+      // await ctx.prisma.workout.update({
+      //   where: {
+      //     id: input.id,
+      //   },
+      //   data: input.updates,
+      // });
+    }),
 });
