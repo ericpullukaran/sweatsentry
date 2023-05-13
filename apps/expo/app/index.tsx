@@ -23,8 +23,15 @@ const SignOut = () => {
 };
 
 const HomeScreen = () => {
+  const trpcContext = trpc.useContext();
   const router = useRouter();
   const userQuery = trpc.user.current.useQuery(); // XX FFFS THIS IS NOT WORKING
+  const currentWorkout = trpc.workouts.current.useQuery();
+  const startWorkout = trpc.workouts.start.useMutation({
+    onSuccess: () => {
+      trpcContext.workouts.invalidate();
+    },
+  });
 
   return (
     <SafeAreaView>
@@ -58,20 +65,21 @@ const HomeScreen = () => {
 
         <SignOut />
         <View className="absolute bottom-9 left-0 right-0">
-          <Link
-            href={"create_workout"}
-            className="mx-auto rounded-full"
-            asChild
+          <Pressable
+            onPress={async () => {
+              if (!currentWorkout.data) {
+                await startWorkout.mutateAsync();
+              }
+              router.push("create_workout");
+            }}
           >
-            <Pressable>
-              <View className="mx-auto flex flex-row items-center justify-center rounded-full bg-[#FBBD23] p-1  shadow-lg">
-                <PlusCircleIcon width={50} height={50} color={"white"} />
-                <Text className="ml-1 mr-4 text-lg font-extrabold">
-                  Start Workout
-                </Text>
-              </View>
-            </Pressable>
-          </Link>
+            <View className="mx-auto flex flex-row items-center justify-center rounded-full bg-[#FBBD23] p-1  shadow-lg">
+              <PlusCircleIcon width={50} height={50} color={"white"} />
+              <Text className="ml-1 mr-4 text-lg font-extrabold">
+                {!currentWorkout.data ? "Start Workout" : "Continue"}
+              </Text>
+            </View>
+          </Pressable>
         </View>
       </View>
     </SafeAreaView>

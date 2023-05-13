@@ -30,6 +30,33 @@ const setDetailsUnion = z.union([
   }),
 ]);
 
+const setArrayUnion = z.union([
+  z.array(
+    z.object({
+      weight: z.number().positive().finite(),
+      numReps: z.number().positive().int(),
+    }),
+  ),
+  z.array(
+    z.object({
+      numReps: z.number().positive().int(),
+    }),
+  ),
+  z.array(
+    z.object({
+      time: z.number().positive().int(),
+    }),
+  ),
+  z.array(
+    z.object({
+      time: z.number().positive().int(),
+      distance: z.number().positive(),
+    }),
+  ),
+]);
+
+type SetUnion = z.infer<typeof setArrayUnion>;
+
 export const workoutsRouter = router({
   history: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.workout.findMany({
@@ -62,10 +89,12 @@ export const workoutsRouter = router({
 
   start: protectedProcedure
     .input(
-      z.object({
-        name: z.string().optional(),
-        templateId: z.string().optional(),
-      }),
+      z
+        .object({
+          name: z.string().optional(),
+          templateId: z.string().optional(),
+        })
+        .optional(),
     )
     .mutation(async ({ ctx, input }) => {
       const current = await getCurrentWorkout(ctx);
@@ -78,7 +107,7 @@ export const workoutsRouter = router({
 
       await ctx.prisma.workout.create({
         data: {
-          name: input.name || "Untitled workout",
+          name: input?.name || "Untitled workout",
           userId: ctx.user.id,
         },
       });
@@ -91,7 +120,7 @@ export const workoutsRouter = router({
           z.object({
             exerciseId: z.string(),
             notes: z.string().optional(),
-            sets: z.array(setDetailsUnion),
+            sets: setArrayUnion,
           }),
         ),
       }),
@@ -143,7 +172,7 @@ export const workoutsRouter = router({
             time: ["time"],
           }[exerciseDetails.measurementType] || [];
 
-        return e.sets.every((set) =>
+        return (e.sets as Record<string, unknown>[]).every((set) =>
           requiredFields.every((field) => field in set),
         );
       });
@@ -169,10 +198,12 @@ export const workoutsRouter = router({
                 notes: e.notes,
                 sets: {
                   createMany: {
-                    data: e.sets.map((set, i) => ({
-                      ...set,
-                      order: i,
-                    })),
+                    data: (e.sets as Record<string, unknown>[]).map(
+                      (set, i) => ({
+                        ...set,
+                        order: i,
+                      }),
+                    ),
                   },
                 },
               })),

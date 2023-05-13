@@ -1,5 +1,5 @@
 import { createTRPCReact } from "@trpc/react-query";
-import type { AppRouter } from "@acme/api";
+import type { AppRouter, RouterInputs, RouterOutputs } from "@acme/api";
 /**
  * Extend this function when going to production by
  * setting the baseUrl to your production API URL.
@@ -71,3 +71,5 @@ export const TRPCProvider: React.FC<{
     </trpc.Provider>
   );
 };
+
+export { RouterInputs, RouterOutputs };
