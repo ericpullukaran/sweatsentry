@@ -31,31 +31,32 @@ const setDetailsUnion = z.union([
 ]);
 
 const setArrayUnion = z.union([
-  z.array(
-    z.object({
+  z
+    .object({
       weight: z.number().positive().finite(),
       numReps: z.number().positive().int(),
-    }),
-  ),
-  z.array(
-    z.object({
+    })
+    .array(),
+
+  z
+    .object({
       numReps: z.number().positive().int(),
-    }),
-  ),
-  z.array(
-    z.object({
+    })
+    .array(),
+
+  z
+    .object({
       time: z.number().positive().int(),
-    }),
-  ),
-  z.array(
-    z.object({
+    })
+    .array(),
+
+  z
+    .object({
       time: z.number().positive().int(),
       distance: z.number().positive(),
-    }),
-  ),
+    })
+    .array(),
 ]);
-
-type SetUnion = z.infer<typeof setArrayUnion>;
 
 export const workoutsRouter = router({
   history: protectedProcedure.query(({ ctx }) => {

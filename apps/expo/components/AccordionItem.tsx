@@ -56,12 +56,12 @@ function AccordionItem({ header, body, footer }: AccordionItemProps) {
         </Animated.View>
       </Pressable>
 
-      {isActive && (
-        <View className="-top-4">
-          <View className="px-4 pb-6 pt-8">{body}</View>
-          {footer}
-        </View>
-      )}
+      {/* {isActive && ( */}
+      <View className="-top-4">
+        <View className="px-4 pb-6 pt-8">{body}</View>
+        {footer}
+      </View>
+      {/* )} */}
     </View>
   );
 }
