@@ -19,6 +19,7 @@ type SetType = NonNullable<
 
 export type EndWorkoutExercises = {
   exerciseId: string;
+  tmpId: string;
   notes?: string | undefined;
   sets: RouterInputs["workouts"]["end"]["exercises"][number]["sets"];
 };

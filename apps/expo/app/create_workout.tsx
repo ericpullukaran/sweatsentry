@@ -30,27 +30,10 @@ import ExerciseCard, { EndWorkoutExercises } from "~/components/ExerciseCard";
 import { RouterInputs, RouterOutputs, trpc } from "~/utils/trpc";
 import useInterval from "~/utils/useInterval";
 import Timer from "~/components/Timer";
+import { v4 as uuid } from "uuid";
 
 type Workout = NonNullable<RouterOutputs["workouts"]["current"]>;
 type EndWorkoutInput = RouterInputs["workouts"]["end"];
-
-const a: EndWorkoutInput = {
-  exercises: [
-    {
-      exerciseId: "1",
-      sets: [
-        { weight: 1, numReps: 1 },
-        { weight: 12.5, numReps: 4 },
-      ],
-      notes: "this was easy pz",
-    },
-    {
-      exerciseId: "2",
-      sets: [{ time: 1, distance: 1 }],
-      notes: "this was easy pz",
-    },
-  ],
-};
 
 function CreateWorkout() {
   const router = useRouter();
@@ -61,10 +44,29 @@ function CreateWorkout() {
 
   const currentWorkout = trpc.workouts.current.useQuery();
   const endWorkout = trpc.workouts.end.useMutation();
+  const trpcContext = trpc.useContext();
 
   const handleEndingWorkout = (values: Record<string, any>) => {
     // endWorkout.mutateAsync(values)
-    console.log(JSON.stringify(values));
+    console.log(
+      values.exercises.map((e: any) => ({
+        ...e.exercise,
+        sets: e.sets.map((s: any) => s.set),
+      })),
+    );
+    const objToSend = {
+      exercises: values.exercises.map((e: any) => ({
+        ...e.exercise,
+        sets: e.sets.map((s: any) => s.set),
+      })),
+    };
+    endWorkout.mutate(objToSend as any, {
+      onSettled: (...args) => console.log(args),
+      onSuccess: () => {
+        trpcContext.workouts.invalidate();
+        router.push("/");
+      },
+    });
 
     Alert.alert("Form was submitted with: " + JSON.stringify(values));
   };
@@ -83,6 +85,7 @@ function CreateWorkout() {
 
     exercisesArrayRef.current?.add({
       exercise: {
+        tmpId: uuid(),
         exerciseId: params.selectedExerciseId as string,
         sets: [],
       },
