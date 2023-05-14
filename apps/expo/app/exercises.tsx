@@ -1,6 +1,6 @@
-import { Stack } from "expo-router";
+import { Stack, useNavigation, useRouter, useSearchParams } from "expo-router";
 import React, { useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import DividerWithIcon from "~/components/DividerWithIcon";
 import { myResolveTWConfig } from "~/utils/myResolveTWConfig";
@@ -8,6 +8,11 @@ import { trpc } from "~/utils/trpc";
 
 function Exercises() {
   const [text, setText] = useState("");
+  const sp = useSearchParams();
+  const router = useRouter();
+  const routerNav = useNavigation();
+  console.log(sp);
+
   const exercisesQuery = trpc.exercises.all.useQuery();
 
   return (
@@ -40,8 +45,16 @@ function Exercises() {
             />
           </View>
           {exercisesQuery.data?.map((exercise) => (
-            <View
+            <Pressable
               key={exercise.id}
+              onPress={() =>
+                router.push({
+                  pathname: sp.from as string,
+                  params: {
+                    selectedExerciseId: exercise.id,
+                  },
+                })
+              }
               className="mb-4 h-24 rounded-md border-2 border-red-300"
             >
               <View className="flex h-full flex-row p-3">
@@ -53,7 +66,7 @@ function Exercises() {
                   <Text>{exercise.description}</Text>
                 </View>
               </View>
-            </View>
+            </Pressable>
           ))}
         </View>
       </View>

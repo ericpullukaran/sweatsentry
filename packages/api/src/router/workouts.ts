@@ -9,6 +9,7 @@ const getCurrentWorkout = async (ctx: Context) => {
   return ctx.prisma.workout.findFirst({
     where: {
       userId: ctx.user.id,
+      endTime: null,
     },
   });
 };
@@ -28,6 +29,34 @@ const setDetailsUnion = z.union([
     time: z.number().positive().int(),
     distance: z.number().positive(),
   }),
+]);
+
+const setArrayUnion = z.union([
+  z
+    .object({
+      weight: z.number().nonnegative().finite(),
+      numReps: z.number().nonnegative().int(),
+    })
+    .array(),
+
+  z
+    .object({
+      numReps: z.number().nonnegative().int(),
+    })
+    .array(),
+
+  z
+    .object({
+      time: z.number().nonnegative().int(),
+    })
+    .array(),
+
+  z
+    .object({
+      time: z.number().nonnegative().int(),
+      distance: z.number().nonnegative(),
+    })
+    .array(),
 ]);
 
 export const workoutsRouter = router({
@@ -62,10 +91,12 @@ export const workoutsRouter = router({
 
   start: protectedProcedure
     .input(
-      z.object({
-        name: z.string().optional(),
-        templateId: z.string().optional(),
-      }),
+      z
+        .object({
+          name: z.string().optional(),
+          templateId: z.string().optional(),
+        })
+        .optional(),
     )
     .mutation(async ({ ctx, input }) => {
       const current = await getCurrentWorkout(ctx);
@@ -78,7 +109,7 @@ export const workoutsRouter = router({
 
       await ctx.prisma.workout.create({
         data: {
-          name: input.name || "Untitled workout",
+          name: input?.name || "Untitled workout",
           userId: ctx.user.id,
         },
       });
@@ -89,9 +120,10 @@ export const workoutsRouter = router({
       z.object({
         exercises: z.array(
           z.object({
+            tmpId: z.string(),
             exerciseId: z.string(),
             notes: z.string().optional(),
-            sets: z.array(setDetailsUnion),
+            sets: setArrayUnion,
           }),
         ),
       }),
@@ -143,7 +175,7 @@ export const workoutsRouter = router({
             time: ["time"],
           }[exerciseDetails.measurementType] || [];
 
-        return e.sets.every((set) =>
+        return (e.sets as Record<string, unknown>[]).every((set) =>
           requiredFields.every((field) => field in set),
         );
       });
@@ -155,31 +187,68 @@ export const workoutsRouter = router({
         });
       }
 
+      // Start by updating the workout with its end time
       await ctx.prisma.workout.update({
         where: {
           id: current.id,
         },
         data: {
           endTime: new Date().toISOString(),
-          exercises: {
-            createMany: {
-              data: input.exercises.map((e, i) => ({
-                order: i,
-                exerciseId: e.exerciseId,
-                notes: e.notes,
-                sets: {
-                  createMany: {
-                    data: e.sets.map((set, i) => ({
-                      ...set,
-                      order: i,
-                    })),
-                  },
-                },
-              })),
-            },
-          },
         },
       });
+
+      // Then, create the exercises
+      await ctx.prisma.workoutExercise.createMany({
+        data: input.exercises.map((e, i) => ({
+          id: e.tmpId,
+          order: i,
+          exerciseId: e.exerciseId,
+          notes: e.notes,
+          workoutId: current.id, // assuming there's a workoutId field in Exercise model
+        })),
+      });
+
+      // Finally, create the sets for each exercise
+      // This assumes that you have a way of associating sets with their respective exercises
+      await ctx.prisma.workoutExerciseSet.createMany({
+        data: input.exercises.flatMap((exercise) =>
+          (exercise.sets as any[]).map((set, idx) => ({
+            ...set,
+            complete: true,
+            order: idx,
+            // FIXME: very sketch,
+            workoutExerciseId: exercise.tmpId,
+          })),
+        ),
+      });
+
+      // await ctx.prisma.workout.update({
+      //   where: {
+      //     id: current.id,
+      //   },
+      //   data: {
+      //     endTime: new Date().toISOString(),
+      //     exercises: {
+      //       createMany: {
+      //         data: input.exercises.map((e, i) => ({
+      //           order: i,
+      //           exerciseId: e.exerciseId,
+      //           notes: e.notes,
+      //           sets: {
+      //             createMany: {
+      //               data: (e.sets as Record<string, unknown>[]).map(
+      //                 (set, i) => ({
+      //                   ...set,
+      //                   order: i,
+      //                 }),
+      //               ),
+      //             },
+      //           },
+      //         })),
+      //       },
+      //     },
+      //   },
+      // });
     }),
 
   delete: protectedProcedure

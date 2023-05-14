@@ -1,5 +1,5 @@
 import { TRPCProvider } from "~/utils/trpc";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { SignInSignUpScreen } from "./signin";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
