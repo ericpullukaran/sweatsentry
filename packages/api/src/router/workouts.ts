@@ -85,6 +85,35 @@ export const workoutsRouter = router({
     });
   }),
 
+  get: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.prisma.workout.findFirst({
+        where: {
+          userId: ctx.user.id,
+          id: input.id,
+        },
+        include: {
+          exercises: {
+            orderBy: {
+              order: "asc",
+            },
+            include: {
+              sets: {
+                orderBy: {
+                  order: "asc",
+                },
+              },
+            },
+          },
+        },
+      });
+    }),
+
   current: protectedProcedure.query(async ({ ctx }) => {
     return getCurrentWorkout(ctx);
   }),

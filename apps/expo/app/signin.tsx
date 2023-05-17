@@ -17,7 +17,7 @@ export const SignInSignUpScreen = () => {
                 height: 300,
                 resizeMode: "contain",
               }}
-              className="w-full"
+              className="w-full bg-primary"
             />
           </View>
         </View>

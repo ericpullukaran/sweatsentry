@@ -57,7 +57,10 @@ const HomeScreen = () => {
             </Text>
           </View>
           <View>
-            <TouchableOpacity className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#ededed]">
+            <TouchableOpacity
+              onPress={() => router.push("history")}
+              className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#ededed]"
+            >
               <UserIcon color={"black"} width={40} />
             </TouchableOpacity>
           </View>
