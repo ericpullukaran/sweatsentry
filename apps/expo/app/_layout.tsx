@@ -21,6 +21,7 @@ const Layout: React.FC = () => {
     if (fontsLoaded) {
       setCustomText({
         style: {
+          color: "#FF0000",
           fontFamily: fonts.inter.regular,
         },
       });
@@ -64,7 +65,7 @@ const Layout: React.FC = () => {
                 }}
               />
             </Stack>
-            <StatusBar style="light" />
+            <StatusBar style="dark" />
           </SafeAreaProvider>
         </TRPCProvider>
       </SignedIn>

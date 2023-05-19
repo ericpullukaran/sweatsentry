@@ -12,6 +12,7 @@
     "studio": "cd packages/db && npm run studio",
     "dev": "turbo dev --parallel",
     "web": "turbo dev --filter=nextjs",
+    "postinstall": "pnpm run db-generate",
     "mobile": "cd apps/expo && npm run dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo lint",

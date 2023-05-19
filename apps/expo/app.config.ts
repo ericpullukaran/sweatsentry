@@ -1,5 +1,6 @@
 import { ExpoConfig, ConfigContext } from "@expo/config";
 
+// TODO: remove this asap
 const CLERK_PUBLISHABLE_KEY =
   "pk_test_ZW1pbmVudC1saW9uZmlzaC04NS5jbGVyay5hY2NvdW50cy5kZXYk";
 
