@@ -1,48 +1,62 @@
 import { Stack, useNavigation, useRouter, useSearchParams } from "expo-router";
 import React, { useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import DividerWithIcon from "~/components/DividerWithIcon";
 import { myResolveTWConfig } from "~/utils/myResolveTWConfig";
 import { trpc } from "~/utils/trpc";
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 function Exercises() {
   const [text, setText] = useState("");
   const sp = useSearchParams();
   const router = useRouter();
   const routerNav = useNavigation();
-  console.log(sp);
 
   const exercisesQuery = trpc.exercises.all.useQuery();
 
   return (
-    <>
-      <View className="flex h-full justify-center">
+    <ScrollView>
+      <View className="flex h-full justify-center bg-base">
         <View className="mx-4 mt-8">
-          <View className="flex flex-row items-start justify-center ">
-            <Text className="text-center text-5xl font-extrabold text-primary">
-              Exercises
-            </Text>
+          <View className="flex flex-row items-center">
+            <View className="ml-2">
+              <Icon name="angle-double-down" size={40} color={"white"} />
+            </View>
+            <View className="flex flex-1 items-end ">
+              <View className="">
+                <Text className="text-center text-5xl font-semibold text-white">
+                  Exercises
+                </Text>
+              </View>
+              <View className="">
+                <Text className="text-md text-center font-normal text-white">
+                  Choose Your Challenge
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
         <View className="mx-4 flex-1 pt-8">
-          <View className="flex flex-row items-center">
-            <MagnifyingGlassIcon
-              className=""
-              height={17}
-              color={myResolveTWConfig("primary-content")}
-            />
-            <Text className=" ml-1 text-lg font-extrabold text-primary-content/50">
-              Search
-            </Text>
-          </View>
-          <View className="mb-8">
-            <TextInput
-              className="block w-full rounded-full border-2 border-gray-200 px-4 py-3 text-sm"
-              onChangeText={setText}
-              value={text}
-              placeholder="Enter some text"
-            />
+          <View className="relative flex items-center">
+            <View className="mb-8 flex h-10 w-5/6 flex-row items-center rounded-full border  border-white border-opacity-10 bg-base-200">
+              <TextInput
+                className="h-full flex-1 rounded-full pl-4"
+                onChangeText={setText}
+                value={text}
+                placeholder="Enter some text"
+                placeholderTextColor={"white"}
+              />
+              <View className="relative -right-1 flex h-12 w-20 items-center justify-center rounded-full bg-primary">
+                <View>
+                  <Icon
+                    name="search"
+                    size={20}
+                    color={myResolveTWConfig("base")}
+                  />
+                </View>
+              </View>
+            </View>
           </View>
           {exercisesQuery.data?.map((exercise) => (
             <Pressable
@@ -55,22 +69,24 @@ function Exercises() {
                   },
                 })
               }
-              className="mb-4 h-24 rounded-md border-2 border-red-300"
+              className="mb-4 h-24 rounded-xl bg-base-100"
             >
               <View className="flex h-full flex-row p-3">
-                <View className=" mr-2 w-20 rounded-md bg-red-300"></View>
+                <View className=" mr-3 w-20 rounded-md bg-[#4D6883]"></View>
                 <View>
-                  <Text className="text-xl font-extrabold">
+                  <Text className="text-xl font-extrabold text-white">
                     {exercise.name}
                   </Text>
-                  <Text>{exercise.description}</Text>
+                  <Text className="text-base text-white">
+                    {exercise.description}
+                  </Text>
                 </View>
               </View>
             </Pressable>
           ))}
         </View>
       </View>
-    </>
+    </ScrollView>
   );
 }
 

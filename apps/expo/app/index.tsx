@@ -3,17 +3,20 @@ import { PlusCircleIcon, UserIcon } from "react-native-heroicons/solid";
 import { Button, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { useAuth } from "@clerk/clerk-expo";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { Image } from "react-native";
 import { trpc } from "../utils/trpc";
 import { fonts } from "~/utils/fonts";
 import { Link, useRouter } from "expo-router";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import { myResolveTWConfig } from "~/utils/myResolveTWConfig";
 
 const SignOut = () => {
   const { signOut } = useAuth();
   return (
-    <View className="rounded-lg border-2 border-gray-500 p-4">
+    <View className="mt-4 w-24 rounded-lg border-2 border-gray-500">
       <Button
         title="Sign Out"
+        color={"white"}
         onPress={() => {
           signOut();
         }}
@@ -23,6 +26,7 @@ const SignOut = () => {
 };
 
 const HomeScreen = () => {
+  trpc.exercises.all.useQuery();
   const trpcContext = trpc.useContext();
   const router = useRouter();
   const userQuery = trpc.user.current.useQuery(); // XX FFFS THIS IS NOT WORKING
@@ -34,37 +38,29 @@ const HomeScreen = () => {
   });
 
   return (
-    <SafeAreaView>
-      <View className="h-full w-full p-4">
+    <SafeAreaView className="bg-base">
+      <View className="h-full w-full px-4">
         <View className="flex-row justify-end">
-          <View className="flex-1">
-            <Text className="pb-2 text-sm">Welcome... (default font)</Text>
-            <Text
-              className="pb-2 text-sm"
-              style={{
-                fontFamily: fonts.inter.regular,
-              }}
-            >
-              Welcome... (Inter)
-            </Text>
-            <Text
-              className="text-5xl text-[#FBBD23]"
-              style={{
-                fontFamily: fonts.inter.extrabold,
-              }}
-            >
-              {userQuery.data?.firstName || "loading..."}
-            </Text>
-          </View>
           <View>
             <TouchableOpacity
               onPress={() => router.push("history")}
-              className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#ededed]"
+              className="flex h-16 w-16 items-center justify-center"
             >
-              <UserIcon color={"black"} width={40} />
+              <Image
+                source={require("../assets/logo_dark.png")}
+                style={{
+                  height: 150,
+                  resizeMode: "contain",
+                }}
+                className="w-full"
+              />
             </TouchableOpacity>
           </View>
         </View>
+        <Text className="text-5xl leading-[55px] text-white">
+          <Text className="font-extrabold text-primary">Ace</Text>, every
+          {"\nworkout counts. Let's conquer today!"}
+        </Text>
 
         <SignOut />
         <View className="absolute bottom-9 left-0 right-0">
@@ -76,10 +72,35 @@ const HomeScreen = () => {
               router.push("create_workout");
             }}
           >
-            <View className="mx-auto flex flex-row items-center justify-center rounded-full bg-[#FBBD23] p-1  shadow-lg">
-              <PlusCircleIcon width={50} height={50} color={"white"} />
-              <Text className="ml-1 mr-4 text-lg font-extrabold">
+            <View className="mx-auto flex flex-row items-center justify-center rounded-2xl bg-base-100 p-2  shadow-lg">
+              {!currentWorkout.data ? (
+                <View className="mr-1 rounded-2xl bg-primary p-4">
+                  <Icon
+                    name="play"
+                    size={20}
+                    color={`${myResolveTWConfig("base")}`}
+                  />
+                </View>
+              ) : (
+                <View className="mr-1 rounded-2xl border-2 border-primary p-4">
+                  <Icon name="play" size={20} color={`white`} />
+                </View>
+              )}
+              <Text className="ml-3 mr-4 text-lg font-medium text-white">
                 {!currentWorkout.data ? "Start Workout" : "Continue"}
+                {!currentWorkout.data && (
+                  <>
+                    <View className={"200 pl-4"}>
+                      <Icon name="chevron-right" size={20} color={`white`} />
+                    </View>
+                    <View className={"200 pl-1 opacity-20"}>
+                      <Icon name="chevron-right" size={20} color={`white`} />
+                    </View>
+                    <View className={"200 pl-1 opacity-5"}>
+                      <Icon name="chevron-right" size={20} color={`white`} />
+                    </View>
+                  </>
+                )}
               </Text>
             </View>
           </Pressable>

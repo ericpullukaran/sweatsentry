@@ -18,7 +18,9 @@ module.exports = {
         secondary: "#1fd65f",
         accent: "#d99330",
         neutral: "#110e0e",
-        "base-100": "#171212",
+        base: "#151718",
+        "base-100": "#282A2C",
+        "base-200": "#303234",
       },
       fontFamily: {
         sans: ["Inter, sans-serif"],
@@ -27,3 +29,8 @@ module.exports = {
   },
   plugins: [],
 };
+
+// If tw decides to be annoying just run
+// $ expo start -c
+// $ nr dev (inside the expo folder)
+// https://www.nativewind.dev/guides/troubleshooting

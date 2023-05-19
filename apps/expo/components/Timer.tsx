@@ -4,6 +4,11 @@ import useInterval from "~/utils/useInterval";
 
 type Props = {
   fromTime: Date;
+  classes?: string;
+};
+
+const style = {
+  fontVariant: ["tabular-nums"],
 };
 
 const getFormattedTime = (startTime: Date) => {
@@ -14,11 +19,15 @@ const getFormattedTime = (startTime: Date) => {
   return formattedTime;
 };
 
-export default function Timer({ fromTime }: Props) {
+export default function Timer({ fromTime, classes }: Props) {
   const [duration, setDuration] = useState<string>();
 
   useInterval(() => {
     setDuration(getFormattedTime(fromTime));
   }, 1000);
-  return <Text>{duration}</Text>;
+  return (
+    <Text className={`${classes}`} style={style}>
+      {duration}
+    </Text>
+  );
 }

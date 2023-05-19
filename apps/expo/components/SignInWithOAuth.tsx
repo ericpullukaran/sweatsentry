@@ -4,6 +4,7 @@ import React from "react";
 import { Text, Image, TouchableOpacity, View } from "react-native";
 import { useWarmUpBrowser } from "../utils/useWarmUpBrowser";
 import DividerWithIcon from "./DividerWithIcon";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const SignInWithOAuth = () => {
   useWarmUpBrowser();
@@ -41,32 +42,27 @@ const SignInWithOAuth = () => {
   );
 
   return (
-    <>
-      <Text className="p-4 text-center text-4xl">
-        <Text className="font-extrabold text-orange-400">Ace</Text> your fitness
-        goals
+    <View>
+      <Text className="p-4 text-center text-5xl font-extrabold text-white">
+        Active Aces
       </Text>
 
-      <DividerWithIcon>
-        <UserIcon color={"black"} width={20} />
+      <DividerWithIcon className="opacity-5">
+        <UserIcon color={"white"} width={20} />
       </DividerWithIcon>
 
-      <View className="flex-row justify-center gap-4">
+      <View className="mt-6 flex-row justify-around ">
         <TouchableOpacity
           onPress={() => handleSignInWithPress("facebook")}
-          className="flex h-16 w-16 items-center justify-center rounded-lg border-2 border-[#ededed]"
+          className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-[#1877F2]"
         >
-          <Image
-            source={require("~/assets/f_logo_RGB-Blue_58.png")}
-            style={{
-              resizeMode: "contain",
-            }}
-            className="h-12 w-12"
-          />
+          <View className="relative top-2">
+            <Icon name="facebook" size={50} color={"white"} />
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => handleSignInWithPress("google")}
-          className="flex h-16 w-16 items-center justify-center rounded-lg border-2 border-[#ededed]"
+          className="flex h-16 w-16 items-center justify-center rounded-lg"
         >
           <Image
             source={require("~/assets/google.png")}
@@ -78,18 +74,12 @@ const SignInWithOAuth = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => handleSignInWithPress("apple")}
-          className="flex h-16 w-16 items-center justify-center rounded-lg border-2 border-[#ededed]"
+          className="flex h-16 w-16 items-center justify-center rounded-lg"
         >
-          <Image
-            source={require("~/assets/apple.png")}
-            style={{
-              resizeMode: "contain",
-            }}
-            className="h-12 w-12"
-          />
+          <Icon name="apple" size={55} color={"white"} />
         </TouchableOpacity>
       </View>
-    </>
+    </View>
   );
 };
 

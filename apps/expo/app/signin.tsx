@@ -7,17 +7,17 @@ import SignInWithOAuth from "~/components/SignInWithOAuth";
 
 export const SignInSignUpScreen = () => {
   return (
-    <ScrollView>
-      <SafeAreaView className="flex h-screen justify-center">
+    <View>
+      <SafeAreaView className="flex h-screen justify-center bg-base">
         <View className="mx-8 mb-8">
           <View>
             <Image
-              source={require("../assets/aa_blob.png")}
+              source={require("../assets/logo_dark.png")}
               style={{
-                height: 300,
+                height: 150,
                 resizeMode: "contain",
               }}
-              className="w-full bg-primary"
+              className="w-full"
             />
           </View>
         </View>
@@ -25,6 +25,6 @@ export const SignInSignUpScreen = () => {
           <SignInWithOAuth />
         </View>
       </SafeAreaView>
-    </ScrollView>
+    </View>
   );
 };

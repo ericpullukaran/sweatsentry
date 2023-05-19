@@ -10,3 +10,7 @@ module.exports = {
 
   presets: [require("@acme/tailwind-config")],
 };
+// const a = require("@acme/tailwind-config");
+// const fs = require("fs");
+// fs.appendFileSync("testss", JSON.stringify(a, null, 2));
+// console.dir(a, { depth: Infinity });
