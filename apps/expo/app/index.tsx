@@ -9,6 +9,7 @@ import { fonts } from "~/utils/fonts";
 import { Link, useRouter } from "expo-router";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { myResolveTWConfig } from "~/utils/myResolveTWConfig";
+import HistoryCard from "~/components/HistoryCard";
 
 const SignOut = () => {
   const { signOut } = useAuth();
@@ -63,6 +64,22 @@ const HomeScreen = () => {
         </Text>
 
         <SignOut />
+
+        <View className="mt-8 h-60 rounded-lg bg-base-100 px-3">
+          <View className="m-2 h-8 flex-row items-center">
+            <Text className="flex-1 text-lg font-medium text-white/50">
+              Recent Workouts
+            </Text>
+            <Icon
+              name="chevron-right"
+              size={17}
+              color={`white`}
+              style={{ opacity: 0.5 }}
+            />
+          </View>
+          <HistoryCard />
+        </View>
+
         <View className="absolute bottom-9 left-0 right-0">
           <Pressable
             onPress={async () => {
