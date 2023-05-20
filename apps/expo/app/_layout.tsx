@@ -7,8 +7,10 @@ import { tokenCache } from "~/utils/cache";
 import Constants from "expo-constants";
 import { SplashScreen, Stack } from "expo-router";
 import { fonts, useFonts } from "~/utils/fonts";
-import { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import { setCustomText } from "react-native-global-props";
+import { TamaguiProvider } from "tamagui";
+import config from "../tamagui.config";
 
 export const unstable_settings = {
   initialRouteName: "index",
@@ -21,7 +23,7 @@ const Layout: React.FC = () => {
     if (fontsLoaded) {
       setCustomText({
         style: {
-          color: "#FF0000",
+          color: "white",
           fontFamily: fonts.inter.regular,
         },
       });
@@ -37,41 +39,43 @@ const Layout: React.FC = () => {
       publishableKey={Constants.expoConfig?.extra?.CLERK_PUBLISHABLE_KEY}
       tokenCache={tokenCache}
     >
-      <SignedIn>
-        <TRPCProvider>
-          <SafeAreaProvider>
-            {/* ! Don't put any elements around the <Stack /> here. You might looks several hours of your life */}
-            <Stack>
-              <Stack.Screen
-                name="index"
-                options={{
-                  headerShown: false,
-                  animation: "fade",
-                }}
-              />
-              <Stack.Screen
-                name="create_workout"
-                options={{
-                  // Set the presentation mode to modal for our modal route.
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="exercises"
-                options={{
-                  // Set the presentation mode to modal for our modal route.
-                  presentation: "modal",
-                  headerShown: false,
-                }}
-              />
-            </Stack>
-            <StatusBar style="dark" />
-          </SafeAreaProvider>
-        </TRPCProvider>
-      </SignedIn>
-      <SignedOut>
-        <SignInSignUpScreen />
-      </SignedOut>
+      <TamaguiProvider config={config}>
+        <SignedIn>
+          <TRPCProvider>
+            <SafeAreaProvider>
+              {/* ! Don't put any elements around the <Stack /> here. You might looks several hours of your life */}
+              <Stack>
+                <Stack.Screen
+                  name="index"
+                  options={{
+                    headerShown: false,
+                    animation: "fade",
+                  }}
+                />
+                <Stack.Screen
+                  name="create_workout"
+                  options={{
+                    // Set the presentation mode to modal for our modal route.
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="exercises"
+                  options={{
+                    // Set the presentation mode to modal for our modal route.
+                    presentation: "modal",
+                    headerShown: false,
+                  }}
+                />
+              </Stack>
+              <StatusBar style="dark" />
+            </SafeAreaProvider>
+          </TRPCProvider>
+        </SignedIn>
+        <SignedOut>
+          <SignInSignUpScreen />
+        </SignedOut>
+      </TamaguiProvider>
     </ClerkProvider>
   );
 };

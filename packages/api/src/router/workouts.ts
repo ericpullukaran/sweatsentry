@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { Context } from "../context";
 import { protectedProcedure, router } from "../trpc";
-import { TRPCError } from "@trpc/server";
+import { ProcedureParams, Simplify, TRPCError } from "@trpc/server";
 
 const getCurrentWorkout = async (ctx: Context) => {
   if (!ctx.user) return null;
@@ -58,6 +58,21 @@ const setArrayUnion = z.union([
     })
     .array(),
 ]);
+
+type SetArrayUnionType =
+  | { weight: number; numReps: number }[]
+  | { numReps: number }[]
+  | { time: number }[]
+  | { time: number; distance: number }[];
+
+type SetArrayInputType = {
+  exercises: {
+    sets: SetArrayUnionType;
+    exerciseId: string;
+    tmpId: string;
+    notes?: string;
+  }[];
+};
 
 export const workoutsRouter = router({
   history: protectedProcedure.query(({ ctx }) => {
