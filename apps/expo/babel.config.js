@@ -1,3 +1,5 @@
+process.env.TAMAGUI_TARGET = "native";
+
 module.exports = function (api) {
   api.cache(true);
   return {
@@ -9,6 +11,12 @@ module.exports = function (api) {
           alias: {
             "~": "./",
           },
+        },
+      ],
+      [
+        "transform-inline-environment-variables",
+        {
+          include: ["TAMAGUI_TARGET"],
         },
       ],
       require.resolve("expo-router/babel"),
