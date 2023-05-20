@@ -65,18 +65,19 @@ const HomeScreen = () => {
 
         <SignOut />
 
-        <View className="mt-8 h-60 rounded-lg bg-base-100 px-3">
+        <View className="mt-8 rounded-lg bg-base-100 px-3 pb-3">
           <View className="m-2 h-8 flex-row items-center">
             <Text className="flex-1 text-lg font-medium text-white/50">
               Recent Workouts
             </Text>
             <Icon
               name="chevron-right"
-              size={17}
+              size={15}
               color={`white`}
               style={{ opacity: 0.5 }}
             />
           </View>
+          <HistoryCard classNames="mb-3" />
           <HistoryCard />
         </View>
 
